@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Program;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -35,6 +36,18 @@ class CategoryRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findProgramInCategory ($categoryName)
+    {
+        $query = $this->createQueryBuilder('p')
+        ->join('p.category', 'c')
+        ->where('c.name = :categoryName')
+        ->setParameter('categoryName', $categoryName)
+        ->getQuery();
+
+        return $query->getResult();
+ 
+    }
 
     /*
     public function findOneBySomeField($value): ?Category

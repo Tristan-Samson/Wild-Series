@@ -36,6 +36,19 @@ class ProgramRepository extends ServiceEntityRepository
     }
     */
 
+    public function findProgramInCategory ($category)
+    {
+        $categoryName = $category->getName();
+        $query = $this->createQueryBuilder('p')
+        ->join('p.category', 'c')
+        ->where('c.name = :categoryName')
+        ->setParameter('categoryName', $categoryName)
+        ->getQuery();
+
+        return $query->getResult();
+ 
+    }
+
     /*
     public function findOneBySomeField($value): ?Program
     {
