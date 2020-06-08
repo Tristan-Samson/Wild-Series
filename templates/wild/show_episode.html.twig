@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{program.title}} : {{ episode.title }}{% endblock %}
+
+{% block body %}
+
+<h1>{{episode.title}}</h1>
+<ul>
+    <li>Série : {{program.title}}</li>
+    <li>Saison : {{season.number}}</li>
+    <li>Numéro de l'épisode : {{episode.number}}</li>
+    <li>Synopsis : {{episode.synopsis}}</li>
+</ul>
+
+
+
+
+
+<a href="{{ path('wild_season', {'id': season.number }) }}">
+    Retour à la saison
+</a>
+</br>
+{% set haystack= program.title|lower %}
+{% set needle= ' ' %}
+{% set new= '-' %}
+
+<a href="{{ path('wild_program', { 'slug': haystack|replace({ (needle): new }) }) }}">
+    Retour à la série
+</a>
+</br>
+<a href="{{ path('wild_index') }}">
+    Retour à l'accueil
+</a>
+
+{% endblock %}
