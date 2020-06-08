@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{program.title}} saison {{ season.number }}{% endblock %}
+
+{% block body %}
+
+<h1>{{program.title}} saison {{season.number}}</h1>
+
+{% for episode in episodes %}
+    <div>
+        <h2> Episode {{ episode.number }} : {{ episode.title }}</h2>
+        <p>{{ episode.synopsis }}</p>
+    </div>
+{% else %}
+    Aucun épisode trouvé.
+
+{% endfor %}
+
+{% set haystack= program.title|lower %}
+{% set needle= ' ' %}
+{% set new= '-' %}
+
+<a href="{{ path('wild_program', { 'slug': haystack|replace({ (needle): new }) }) }}">
+    Retour à la série
+</a>
+</br>
+<a href="{{ path('wild_index') }}">
+    Retour à l'accueil
+</a>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ slug }}{% endblock %}
+
+{% block body %}
+
+<h1>{{slug}}</h1>
+
+{% for season in seasons %}
+
+    <a href="/wild/season/{{season.id}}">
+        <div>
+            <h2> Saison {{ season.number }}</h2>
+            <p>{{ season.description }}</p>
+        </div>
+    </a>
+{% else %}
+    Aucune saison trouvée.
+
+{% endfor %}
+
+<a href="{{ path('wild_index') }}">
+    Retour à l'accueil
+</a>
+
+{% endblock %}
