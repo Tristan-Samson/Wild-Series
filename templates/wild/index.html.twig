@@ -4,6 +4,12 @@
 
 {% block body %}
     <h1>Toutes les séries de la table program : </h1>
+
+    {{ form_start(categoryForm) }}
+        {{ form_row(categoryForm.name) }}
+        <button class="btn">{{ button_label|default('Submit') }}</button>
+    {{ form_end(categoryForm) }}
+
     {% for program in programs %}
         <div>
             <h2>{{ loop.index }} / {{ program.title }} - Catégorie : {{ program.category.name }}</h2>

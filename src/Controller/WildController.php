@@ -6,8 +6,11 @@ use App\Entity\Program;
 use App\Entity\Category;
 use App\Entity\Season;
 use App\Entity\Episode;
+use App\Form\ProgramSearchType;
+use App\Form\CategoryType;
 use Doctrine\ORM\EntityRepository;
 use src\Repository\ProgramRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,8 +21,22 @@ class WildController extends AbstractController
     /**
      * @Route("/wild", name="wild_index")
      */
-    public function index() : Response
+    public function index(Request $request) : Response
     {
+        $category = new Category();
+        $categoryForm = $this->createForm(CategoryType::class, $category, ['method' => Request::METHOD_POST]);
+
+        $categoryForm->handleRequest($request);
+
+        if ($categoryForm->isSubmitted()) {
+            $data = $categoryForm->getData();
+            // $data contains $_POST data
+            //$searchedategory = $this->getDoctrine()
+            //->getRepository(Category::class)
+            //->findByName($data->getName());
+            return $this->showByCategory($data);
+        }
+
         $programs = $this->getDoctrine()
           ->getRepository(Program::class)
           ->findAll();
@@ -32,6 +49,7 @@ class WildController extends AbstractController
 
         return $this->render('wild/index.html.twig', [
             'programs' => $programs,
+            'categoryForm' => $categoryForm->createView(),
         ]);
     }
 
@@ -67,12 +85,13 @@ class WildController extends AbstractController
 
 
     /**
-     * @Route("/wild/category/{categoryName}", requirements={"categoryName"="[a-z0-9\-]*"}, name="wild_category")
-     * @param string $categoryName
+     * @Route("/wild/category/{name}", name="wild_category")
+     * @param Category $category
      * @return Response
      */
-    public function showByCategory(?string $categoryName): Response
+    public function showByCategory(Category $category): Response
     {
+        $categoryName = $category->getName();
         if (!$categoryName) {
             throw $this
                 ->createNotFoundException('No category name has been sent to find a program in program\'s table.');
@@ -81,10 +100,6 @@ class WildController extends AbstractController
             '/-/',
             ' ', ucwords(trim(strip_tags($categoryName)), "-")
         );
-
-        $category = $this->getdoctrine()
-            ->getRepository(Category::class)
-            ->findOneByName($categoryName);
 
         $programs = $this->getDoctrine()
             ->getRepository(Program::class)
