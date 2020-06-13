@@ -23,9 +23,25 @@
                 <th>Poster</th>
                 <td>{{ program.poster }}</td>
             </tr>
+            <tr>
+                <th>Acteur</th>
+                <td>
+                    <ul>
+                        {% for actor in program.actors %}
+                            <li>
+                                <a href="{{ path('actor_show', {'id': actor.id}) }}">
+                                    {{ actor.name }} 
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>Aucun acteur pour cette série</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
         </tbody>
     </table>
-
+    
     <a href="{{ path('program_index') }}">back to list</a>
 
     <a href="{{ path('program_edit', {'id': program.id}) }}">edit</a>
